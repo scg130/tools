@@ -66,5 +66,5 @@ func NewTracerWrapper() client.Wrapper {
 		ic,
 		true,
 	}
-	return opcplugin.NewClientWrapper(t.T)
+	return opcplugin.NewClientWrapper(st.T)
 }
