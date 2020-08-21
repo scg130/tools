@@ -1,4 +1,4 @@
-package handler
+package handlers
 
 import (
 	"github.com/micro/go-micro/v2/api/server"
