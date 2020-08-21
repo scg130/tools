@@ -2,7 +2,6 @@ package wrappers
 
 import (
 	"context"
-	"test/protos/app"
 
 	"github.com/afex/hystrix-go/hystrix"
 	"github.com/micro/go-micro/v2/client"
@@ -25,14 +24,16 @@ func (tw *TestWrapper) Call(ctx context.Context, req client.Request, rsp interfa
 	return hystrix.Do(command, func() error {
 		return tw.Client.Call(ctx, req, rsp)
 	}, func(e error) error {
-		res := rsp.(*app.Reply)
-		res.Count = "timeout"
-		res.Status = int32(32)
+		rsp = map[string]interface{}{
+			"code": -1,
+			"msg":  "timeout",
+			"data": nil,
+		}
 		return nil
 	})
 }
 
-func NewTestWrapper() client.Wrapper {
+func NewHystrixWrapper() client.Wrapper {
 	return func(c client.Client) client.Client {
 		return &TestWrapper{c}
 	}
