@@ -53,7 +53,7 @@ var st selfTracer
 
 func NewTracerWrapper() client.Wrapper {
 	if st.flag {
-		return nil
+		return opcplugin.NewClientWrapper(st.T)
 	}
 
 	t, ic, err := newTracer(TRACER_SRV_NAME, TRACER_ADDR)
