@@ -24,11 +24,11 @@ func (tw *TestWrapper) Call(ctx context.Context, req client.Request, rsp interfa
 	return hystrix.Do(command, func() error {
 		return tw.Client.Call(ctx, req, rsp)
 	}, func(e error) error {
-		rsp = map[string]interface{}{
-			"code": -1,
-			"msg":  "timeout",
-			"data": nil,
-		}
+		// switch rsp.(type) {
+		// case *go_micro_service_user.Response:
+		// 	res := rsp.(*go_micro_service_user.Response)
+		// 	res.Msg = "A"
+		// }
 		return nil
 	})
 }
