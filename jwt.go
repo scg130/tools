@@ -2,8 +2,10 @@ package tools
 
 import (
 	"errors"
-	"github.com/dgrijalva/jwt-go"
+	"fmt"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type Claims struct {
@@ -29,11 +31,11 @@ func ValidToken(tokenStr string, key string) (interface{}, error) {
 	})
 
 	if err != nil {
-		return nil, errors.New("auth failure")
+		return nil, errors.New(fmt.Sprintf("auth failure err:%v", err))
 	}
 
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
 		return claims.Data, nil
 	}
-	return nil, errors.New("auth failure")
+	return nil, errors.New(fmt.Sprintf("auth failure err:%v", err))
 }
