@@ -3,6 +3,7 @@ package tools
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -29,6 +30,11 @@ func ValidToken(tokenStr string, key string) (interface{}, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &claim, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
+
+	if strings.Contains(err.Error(), "token is expired by") {
+		data := token.Claims.(*Claims)
+		return data.Data, errors.New("expired")
+	}
 
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("auth failure err:%v", err))
