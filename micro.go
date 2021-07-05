@@ -1,21 +1,29 @@
 package tools
 
 import (
+	"fmt"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/client/selector"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
 	"github.com/micro/go-micro/v2/server"
+	"os"
 )
 
-const (
-	REGISTRY_ADDR = "127.0.0.1:2379"
-)
 
 func Reg() registry.Registry {
+	host := os.Getenv("ETCD_HOST")
+	port := os.Getenv("ETCD_PORT")
+	if host == "" {
+		host = "127.0.0.1"
+	}
+	if port == "" {
+		port = "2379"
+	}
+	registrAddr := fmt.Sprintf("%s:%s",host,port)
 	return etcd.NewRegistry(func(op *registry.Options) {
-		op.Addrs = []string{REGISTRY_ADDR}
+		op.Addrs = []string{registrAddr}
 	})
 }
 
