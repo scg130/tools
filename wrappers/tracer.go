@@ -1,7 +1,9 @@
 package wrappers
 
 import (
+	"fmt"
 	"io"
+	"os"
 	"time"
 
 	"github.com/micro/go-micro/v2/client"
@@ -55,8 +57,15 @@ func NewTracerWrapper() client.Wrapper {
 	if st.flag {
 		return opcplugin.NewClientWrapper(st.T)
 	}
+	tracerAddr := ""
+	host := os.Getenv("TRACER_HOST")
+	if host == "" {
+		tracerAddr = TRACER_ADDR
+	} else {
+		tracerAddr = fmt.Sprintf("%s:6831",host)
+	}
 
-	t, ic, err := newTracer(TRACER_SRV_NAME, TRACER_ADDR)
+	t, ic, err := newTracer(TRACER_SRV_NAME, tracerAddr)
 	if err != nil {
 		panic(err)
 	}
