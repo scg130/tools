@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	TRACER_ADDR     = "127.0.0.1:6831"
+	TRACER_ADDR     = "127.0.0.1:5775"
 	TRACER_SRV_NAME = "tracer"
 )
 
@@ -28,6 +28,7 @@ func newTracer(servicename string, addr string) (opentracing.Tracer, io.Closer, 
 		Reporter: &jaegercfg.ReporterConfig{
 			LogSpans:            true,
 			BufferFlushInterval: 1 * time.Second,
+			LocalAgentHostPort: "192.168.8.144:5775",
 		},
 	}
 
@@ -62,7 +63,7 @@ func NewTracerWrapper() client.Wrapper {
 	if host == "" {
 		tracerAddr = TRACER_ADDR
 	} else {
-		tracerAddr = fmt.Sprintf("%s:6831",host)
+		tracerAddr = fmt.Sprintf("%s:5775",host)
 	}
 
 	t, ic, err := newTracer(TRACER_SRV_NAME, tracerAddr)
