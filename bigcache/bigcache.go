@@ -16,8 +16,8 @@ var (
 func SetupGlobalCache() error {
 	config := bigcache.Config{
 		Shards:             1024,            // 存储的条目数量，值必须是2的幂
-		LifeWindow:         5 * time.Minute, // 超时后条目被处理
-		CleanWindow:        2 * time.Minute, //处理超时条目的时间范围
+		LifeWindow:         1 * time.Minute, // 超时后条目被处理
+		CleanWindow:        1 * time.Minute, //处理超时条目的时间范围
 		MaxEntriesInWindow: 0,               // 在 Life Window 中的最大数量，
 		MaxEntrySize:       0,               // 条目最大尺寸，以字节为单位
 		HardMaxCacheSize:   0,               // 设置缓存最大值，以MB为单位，超过了不在分配内存。0表示无限制分配
