@@ -19,4 +19,4 @@ jobs:
         go-version: 1.17
 
     - name: Run
-      run: ssh root@60.205.191.37
+      run: sshpass
