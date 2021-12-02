@@ -19,6 +19,8 @@ jobs:
         go-version: 1.17
 
     - name: Run
-      run: | 
-      sshpass -p Ssmd013012, ssh root@60.205.191.37 
-      docker ps -a
+      run: |
+          sshpass -p Ssmd013012, ssh root@60.205.191.37
+          docker ps -a
+       
+      
