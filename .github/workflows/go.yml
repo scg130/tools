@@ -18,6 +18,6 @@ jobs:
           go-version: 1.17
 
       - name: Run
-        script: |
+        run: |
           docker images
           docker  ps -a
