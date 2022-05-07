@@ -31,7 +31,7 @@ func ValidToken(tokenStr string, key string) (interface{}, error) {
 		return []byte(key), nil
 	})
 
-	if err!=nil && strings.Contains(err.Error(), "token is expired by") {
+	if err != nil && strings.Contains(err.Error(), "token is expired by") {
 		data := token.Claims.(*Claims)
 		return data.Data, errors.New("expired")
 	}

@@ -3,6 +3,7 @@ module github.com/scg130/tools
 go 1.14
 
 require (
+	github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5 // indirect
 	github.com/cweill/gotests v1.5.3 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fideliscyber/x509 v0.0.0-20180205153130-ec1dae7316f8 // indirect
