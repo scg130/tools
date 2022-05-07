@@ -62,7 +62,7 @@ func NewTracerWrapper() client.Wrapper {
 	if host == "" {
 		tracerAddr = TRACER_ADDR
 	} else {
-		tracerAddr = fmt.Sprintf("%s:6381",host)
+		tracerAddr = fmt.Sprintf("%s:5775",host)
 	}
 
 	t, ic, err := NewTracer(TRACER_SRV_NAME, tracerAddr)
