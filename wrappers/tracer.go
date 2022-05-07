@@ -14,7 +14,6 @@ import (
 )
 
 const (
-	TRACER_ADDR     = "127.0.0.1:5775"
 	TRACER_SRV_NAME = "tracer"
 )
 
@@ -59,12 +58,11 @@ func NewTracerWrapper() client.Wrapper {
 	}
 	tracerAddr := ""
 	host := os.Getenv("TRACER_HOST")
+	port := os.Getenv("TRACER_PORT")
 	if host == "" {
-		tracerAddr = TRACER_ADDR
-	} else {
-		tracerAddr = fmt.Sprintf("%s:5775",host)
+		panic("tracerAddr is invalid")
 	}
-
+	tracerAddr = fmt.Sprintf("%s:%s", host, port)
 	t, ic, err := NewTracer(TRACER_SRV_NAME, tracerAddr)
 	if err != nil {
 		panic(err)
