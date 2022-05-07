@@ -18,7 +18,7 @@ const (
 	TRACER_SRV_NAME = "tracer"
 )
 
-func newTracer(servicename string, addr string) (opentracing.Tracer, io.Closer, error) {
+func NewTracer(servicename string, addr string) (opentracing.Tracer, io.Closer, error) {
 	cfg := jaegercfg.Configuration{
 		ServiceName: servicename,
 		Sampler: &jaegercfg.SamplerConfig{
@@ -65,7 +65,7 @@ func NewTracerWrapper() client.Wrapper {
 		tracerAddr = fmt.Sprintf("%s:6381",host)
 	}
 
-	t, ic, err := newTracer(TRACER_SRV_NAME, tracerAddr)
+	t, ic, err := NewTracer(TRACER_SRV_NAME, tracerAddr)
 	if err != nil {
 		panic(err)
 	}
