@@ -38,7 +38,7 @@ func NewService(name string, handlers ...server.HandlerWrapper) micro.Service {
 		micro.Version("latest"),
 		micro.Name(name),
 		micro.Registry(reg),
-		micro.RegisterTTL(time.Second*10),
+		micro.RegisterInterval(time.Second*10),
 		micro.RegisterTTL(15*time.Second),
 		micro.WrapHandler(handlers...),
 		micro.Selector(sr),
@@ -50,7 +50,7 @@ func GetMicroClient(serviceName string, wrappers ...client.Wrapper) client.Clien
 	reg := Reg()
 	srv := micro.NewService(
 		micro.Registry(reg),
-		micro.RegisterTTL(time.Second*10),
+		micro.RegisterInterval(time.Second*10),
 		micro.RegisterTTL(15*time.Second),
 		micro.Name(serviceName),
 		micro.WrapClient(
