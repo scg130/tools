@@ -14,12 +14,11 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func GenerateToken(key string, data interface{}) (string, error) {
-	expire := time.Now().Add(time.Hour * 24)
+func GenerateToken(key string, data interface{}, expire time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims{
 		Data: data,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expire.Unix(),
+			ExpiresAt: time.Now().Add(expire).Unix(),
 		},
 	})
 	return token.SignedString([]byte(key))
