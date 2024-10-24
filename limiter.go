@@ -20,7 +20,7 @@ func NewRL(redisCli *redis.Client, ctx context.Context) *RateLimiter {
 	}
 }
 
-func (rl *RateLimiter) Limit(key string, limit int, window int64) bool {
+func (rl *RateLimiter) Allow(key string, limit int, window int64) bool {
 	cr, err := rl.Rdb.Get(rl.Ctx, key).Int()
 	if err != nil && err != redis.Nil {
 		logrus.Error(err)
