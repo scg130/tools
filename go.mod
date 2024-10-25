@@ -8,6 +8,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fortytw2/leaktest v1.3.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.0
+	github.com/ilylx/gconv v0.0.0-20240713143307-cc305f890dcd
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/micro/go-micro/v2 v2.9.1
 	github.com/micro/go-plugins/wrapper/trace/opentracing/v2 v2.9.1
