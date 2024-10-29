@@ -1,7 +1,6 @@
 package rate_limit
 
 import (
-	"context"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -10,33 +9,47 @@ import (
 )
 
 type CountRateLimiter struct {
-	Rdb *redis.Client
-	Ctx context.Context
+	Rdb    *redis.Client
+	Key    string
+	Window time.Duration
+	Limit  int64
 }
 
-func NewCRL(redisCli *redis.Client, ctx context.Context) *CountRateLimiter {
+func NewCRL(key string, window time.Duration, limit int64, redisCli *redis.Client) *CountRateLimiter {
 	return &CountRateLimiter{
-		Rdb: redisCli,
-		Ctx: ctx,
+		Rdb:    redisCli,
+		Key:    key,
+		Window: window,
+		Limit:  limit,
 	}
 }
 
-func (crl *CountRateLimiter) Allow(key string, limit int64, window int64) bool {
+func (crl *CountRateLimiter) Allow() (bool, error) {
 	pipe := crl.Rdb.Pipeline()
-	cr, err := crl.Rdb.Get(crl.Ctx, key).Int64()
+
+	pipe.Get(crl.Rdb.Context(), crl.Key)
+	pipe.Incr(crl.Rdb.Context(), crl.Key)
+	cmds, err := pipe.Exec(crl.Rdb.Context())
 	if err != nil && err != redis.Nil {
 		logrus.Error(err)
-		return false
+		return false, err
 	}
-	if gconv.Int64(cr) >= limit {
-		return false
+
+	count, _ := cmds[1].(*redis.IntCmd).Result()
+	if gconv.Int64(count) > crl.Limit {
+		return false, err
 	}
-	pipe.Incr(crl.Ctx, key)
-	pipe.Expire(crl.Ctx, key, time.Duration(window)*time.Second)
-	_, err = pipe.Exec(crl.Rdb.Context())
+	crl.Rdb.Expire(crl.Rdb.Context(), crl.Key, crl.Window)
+	return true, nil
+}
+
+func (crl *CountRateLimiter) Done() {
+	pipe := crl.Rdb.Pipeline()
+
+	pipe.Decr(crl.Rdb.Context(), crl.Key)
+	pipe.Expire(crl.Rdb.Context(), crl.Key, crl.Window)
+	_, err := pipe.Exec(crl.Rdb.Context())
 	if err != nil && err != redis.Nil {
 		logrus.Error(err)
-		return false
 	}
-	return true
 }

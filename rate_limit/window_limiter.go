@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/sirupsen/logrus"
 )
 
 type WindowRateLimiter struct {
@@ -15,7 +16,7 @@ type WindowRateLimiter struct {
 	key      string        // Redis键名
 }
 
-func NewWindowRateLimiter(rate int, interval time.Duration, key string, client *redis.Client) *WindowRateLimiter {
+func NewWindowRateLimiter(key string, interval time.Duration, rate int, client *redis.Client) *WindowRateLimiter {
 	return &WindowRateLimiter{
 		client:   client,
 		rate:     rate,
@@ -36,11 +37,13 @@ func (limiter *WindowRateLimiter) Allow() (bool, error) {
 		Member: fmt.Sprintf("%d", now.UnixNano()),
 	}).Result()
 	if err != nil {
+		logrus.Error(err)
 		return false, err
 	}
 	pipe.Expire(limiter.client.Context(), limiter.key, limiter.interval)
 	cmds, err := pipe.Exec(limiter.client.Context())
 	if err != nil {
+		logrus.Error(err)
 		return false, err
 	}
 
