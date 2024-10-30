@@ -13,8 +13,6 @@ import (
 var rd = redis.NewClient(&redis.Options{
 	Addr:        "localhost:6379",
 	Password:    "smd013012",
-	IdleTimeout: 3500,
-	PoolSize:    50,
 })
 
 func main() {
